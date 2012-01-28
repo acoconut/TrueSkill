@@ -12,4 +12,5 @@ class Gaussian{
         Gaussian fromPrecisionMean(double, double);
         Gaussian operator * (const Gaussian&);
         double absoluteDifference (const Gaussian&);
+        double operator - (const Gaussian &);
 };

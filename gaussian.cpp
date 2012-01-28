@@ -42,6 +42,9 @@ double Gaussian::absoluteDifference (const Gaussian &aux){
         return square;
 }
 
+double Gaussian::operator- (const Gaussian &aux){
+    return this->absoluteDifference(aux);
+}
 int main (){
     return -1;
 }
