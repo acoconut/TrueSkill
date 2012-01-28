@@ -45,6 +45,17 @@ double Gaussian::absoluteDifference (const Gaussian &aux){
 double Gaussian::operator- (const Gaussian &aux){
     return this->absoluteDifference(aux);
 }
+
+double Gaussian::logProductNormalization(const Gaussian &aux){
+    if ((this->precision == 0) || (aux.precision == 0))
+        return 0;
+
+    double varianceSum = this->variance + aux.variance;
+    double meanDifference = this->mean - aux.mean;
+    double logSqrt2Pi = log(sqrt(2*PI));
+    return -logSqrt2Pi - (log(varianceSum)/2.0) - sqrt(meanDifference)/(2.0*varianceSum);
+}
+
 int main (){
     return -1;
 }
