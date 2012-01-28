@@ -1,5 +1,5 @@
-OBJECTS=gaussian.o
-SOURCES=constants.h gaussian.cpp
+OBJECTS= *.o *.gch
+SOURCES= *.h *.cpp
 MYPROGRAM=TrueSkill
 CC=g++
 
