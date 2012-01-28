@@ -1,20 +1,8 @@
+#include "gaussian.h"
 #include <math.h>
 #include "constants.h"
+#include <stdlib.h>
 #include <iostream>
-class Gaussian{
-    private:
-        double mean;
-        double standardDeviation;
-        double variance;
-        double precision;
-        double precisionMean;
-    public:
-        Gaussian(double, double);
-        ~Gaussian();
-        double normalizationConstant(double);
-        Gaussian fromPrecisionMean(double, double);
-        Gaussian operator * (Gaussian);
-};
 
 Gaussian::Gaussian(double mean, double standardDeviation){
     this->mean = mean;
@@ -41,8 +29,17 @@ Gaussian Gaussian::fromPrecisionMean(double precisionMean, double precision){
     return gaussian;
 }
 
-Gaussian Gaussian::operator* (Gaussian aux){
+Gaussian Gaussian::operator* (const Gaussian &aux){
     return fromPrecisionMean(this->precisionMean + aux.precisionMean, this->precision + aux.precision);
+}
+
+double Gaussian::absoluteDifference (const Gaussian &aux){
+    double absolute = abs(this->precisionMean - aux.precisionMean);
+    double square = abs(this->precision - aux.precision);
+    if (absolute > square)
+        return absolute;
+    else
+        return square;
 }
 
 int main (){

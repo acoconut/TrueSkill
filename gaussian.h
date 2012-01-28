@@ -10,5 +10,6 @@ class Gaussian{
         ~Gaussian();
         double normalizationConstant(double);
         Gaussian fromPrecisionMean(double, double);
-        Gaussian operator * (Gaussian);
+        Gaussian operator * (const Gaussian&);
+        double absoluteDifference (const Gaussian&);
 };

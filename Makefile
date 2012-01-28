@@ -1,4 +1,5 @@
-OBJECTS= *.o *.gch
+OBJECTS= *.o 
+REMOBJ= *.gch
 SOURCES= *.h *.cpp
 MYPROGRAM=TrueSkill
 CC=g++
@@ -9,6 +10,6 @@ $(MYPROGRAM): $(OBJECTS)
 	$(CC) -o $(MYPROGRAM) $(OBJECTS)
 
 $(OBJECTS): $(SOURCES)
-	$(CC) -c  $(SOURCES)
+	$(CC) -I. -c -w $(SOURCES)
 clean: 
-	rm -f $(OBJECTS) $(MYPROGRAM)
+	rm -f $(OBJECTS) $(REMOBJ) $(MYPROGRAM)
