@@ -14,4 +14,11 @@ class Gaussian{
         double absoluteDifference (const Gaussian &);
         double operator - (const Gaussian &);
         double logProductNormalization (const Gaussian &);
+        Gaussian operator / (const Gaussian &);
+        double logRatioNormalization(const Gaussian &);
+        double at(double);
+        double at(double, double, double);
+        double cumulativeTo(double);
+        double cumulativeTo(double, double, double);
+        double errorFunctionCumulativeTo(double); 
 };
