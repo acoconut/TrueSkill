@@ -21,4 +21,7 @@ class Gaussian{
         double cumulativeTo(double);
         double cumulativeTo(double, double, double);
         double errorFunctionCumulativeTo(double); 
+        double inverseErrorFunctionCumulativeTo(double);
+        double inverseCumulativeTo(double);
+        double inverseCumulativeTo(double, double, double);
 };

@@ -130,6 +130,36 @@ double Gaussian::errorFunctionCumulativeTo (double x){
     return x >= 0.0 ? ans : (2.0 - ans);
 } 
 
+double Gaussian::inverseErrorFunctionCumulativeTo (double p){
+    //Numerical Recipes 265
+    if (p >= 2.0)
+        return -100;
+
+    if (p <= 0.0)
+        return 100;
+
+    double pp = (p < 1.0) ? p : 2 - p;
+    double t = sqrt(-2*log(pp/2.0));
+    double x = -0.70711*((2.230753 + t*0.27061)/(1.0 + t*(0.99229 + t*0.04481)) - t);
+
+    for (int j = 0; j < 2; j++){
+        double err = errorFunctionCumulativeTo(x) - pp;
+        x += err/(1.12837916709551257*exp(-(x*x)) - x*err);
+    }
+
+    return p < 1.0 ? x : -x;
+}
+
+double Gaussian::inverseCumulativeTo(double x){
+    return inverseCumulativeTo(x,0,1);
+}
+
+double Gaussian::inverseCumulativeTo(double x, double mean, double standardDeviation){
+    //Numerical recipies 320
+    return mean - sqrt(2)*standardDeviation*inverseErrorFunctionCumulativeTo(2*x);
+}
+
+
 
 int main (){
     return -1;
