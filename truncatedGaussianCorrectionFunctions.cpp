@@ -1,7 +1,8 @@
 #include <math.h>
+#include <stdlib.h>;
 #include "truncatedGaussianCorrectionFunctions.h";
 #include "gaussian.h";
-#include <stdlib.h>;
+#include "constants.h";
 
 double truncatedGaussianCorrectionFunctions::cumulativeTo (double x){
     return cumulativeTo (x, 0, 1);
@@ -11,6 +12,16 @@ double truncatedGaussianCorrectionFunctions::cumulativeTo (double x, double mean
     const double invsqrt2 = 1/sqrt(2);
     double result = errorFunctionCumulativeTo(invsqrt2*x);
     return 0.5*result;
+}
+
+double truncatedGaussianCorrectionFunctions::at (double x){
+     return truncatedGaussianCorrectionFunctions::at(x, 0, 1);
+}
+
+double truncatedGaussianCorrectionFunctions::at (double x, double mean, double standardDeviation){
+     double multiplier = 1.0/(standardDeviation * sqrt(2*PI));
+     double expPart = exp((-1.0*pow(x - mean, 2.0))/(2*(standardDeviation*standardDeviation)));
+     return multiplier*expPart;
 }
 
 double truncatedGaussianCorrectionFunctions::errorFunctionCumulativeTo (double x){
@@ -63,10 +74,6 @@ double truncatedGaussianCorrectionFunctions::vExceedsMargin (double teamPerforma
 }
 
 
-double truncatedGaussianCorrectionFunctions::wExceedsMargin (double teamPerformanceDifference, double drawMargin, double c){
-    return truncatedGaussianCorrectionFunctions::wExceedsMargin(teamPerformanceDifference/c, drawMargin/c);
-}
-
 double truncatedGaussianCorrectionFunctions::wExceedsMargin (double teamPerformanceDifference, double drawMargin){
     double denominator = truncatedGaussianCorrectionFunctions::cumulativeTo(teamPerformanceDifference - drawMargin);
     if (denominator < 2.222758749e-162){
@@ -77,4 +84,29 @@ double truncatedGaussianCorrectionFunctions::wExceedsMargin (double teamPerforma
     }
     double vWin = truncatedGaussianCorrectionFunctions::vExceedsMargin(teamPerformanceDifference, drawMargin);
     return vWin * (vWin + teamPerformanceDifference - drawMargin);
+}
+
+double truncatedGaussianCorrectionFunctions::wExceedsMargin (double teamPerformanceDifference, double drawMargin, double c){
+    return truncatedGaussianCorrectionFunctions::wExceedsMargin(teamPerformanceDifference/c, drawMargin/c);
+}
+
+/** The additive correction of a double-sided truncated Gaussian with unit variance */
+double truncatedGaussianCorrectionFunctions::vWithinMargin (double teamPerformanceDifference, double drawMargin){
+    double teamPerformanceDifferenceAbsoluteValue = abs(teamPerformanceDifference);
+    double denominator = truncatedGaussianCorrectionFunctions::cumulativeTo(drawMargin - teamPerformanceDifferenceAbsoluteValue) - truncatedGaussianCorrectionFunctions::cumulativeTo(-drawMargin - teamPerformanceDifferenceAbsoluteValue);
+    if (denominator < 2.222758749e-162){
+        if (teamPerformanceDifference < 0.0){
+            return -teamPerformanceDifference - drawMargin;
+        }
+        return -teamPerformanceDifference + drawMargin;
+    }
+
+    double numerator = truncatedGaussianCorrectionFunctions::at(-drawMargin - teamPerformanceDifferenceAbsoluteValue) - truncatedGaussianCorrectionFunctions::at(drawMargin - teamPerformanceDifferenceAbsoluteValue);
+    if (teamPerformanceDifference < 0.0)
+        return -numerator/denominator;
+    return numerator/denominator;
+}
+
+double truncatedGaussianCorrectionFunctions::vWithinMargin (double teamPerformanceDifference, double drawMargin, double c){
+    return truncatedGaussianCorrectionFunctions::vWithinMargin(teamPerformanceDifference/c, drawMargin/c);
 }
