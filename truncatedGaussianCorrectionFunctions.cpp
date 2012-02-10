@@ -110,3 +110,18 @@ double truncatedGaussianCorrectionFunctions::vWithinMargin (double teamPerforman
 double truncatedGaussianCorrectionFunctions::vWithinMargin (double teamPerformanceDifference, double drawMargin, double c){
     return truncatedGaussianCorrectionFunctions::vWithinMargin(teamPerformanceDifference/c, drawMargin/c);
 }
+
+double truncatedGaussianCorrectionFunctions::wWithinMargin (double teamPerformanceDifference, double drawMargin){
+    double teamPerformanceDifferenceAbsoluteValue = abs(teamPerformanceDifference);
+    double denominator = truncatedGaussianCorrectionFunctions::cumulativeTo(drawMargin - teamPerformanceDifference) - truncatedGaussianCorrectionFunctions::cumulativeTo(-drawMargin - teamPerformanceDifference);
+    if (denominator < 2.222758749e-162)
+        return 1.0;
+    
+    double vt = truncatedGaussianCorrectionFunctions::vWithinMargin(teamPerformanceDifferenceAbsoluteValue, drawMargin);
+    
+    return vt*vt + (drawMargin - teamPerformanceDifferenceAbsoluteValue) * truncatedGaussianCorrectionFunctions::at(drawMargin - teamPerformanceDifferenceAbsoluteValue) - (-drawMargin - teamPerformanceDifferenceAbsoluteValue) * truncatedGaussianCorrectionFunctions::at(-drawMargin - teamPerformanceDifferenceAbsoluteValue)/denominator;
+}
+
+double truncatedGaussianCorrectionFunctions::wWithinMargin (double teamPerformanceDifference, double drawMargin, double c){
+    return truncatedGaussianCorrectionFunctions::wWithinMargin(teamPerformanceDifference/c, drawMargin/c);
+}
