@@ -8,7 +8,6 @@ class Gaussian{
     public:
         Gaussian(double, double);
         ~Gaussian();
-        double normalizationConstant(double);
         Gaussian fromPrecisionMean(double, double);
         Gaussian operator * (const Gaussian &);
         double absoluteDifference (const Gaussian &);
@@ -16,12 +15,4 @@ class Gaussian{
         double logProductNormalization (const Gaussian &);
         Gaussian operator / (const Gaussian &);
         double logRatioNormalization(const Gaussian &);
-        double at(double);
-        double at(double, double, double);
-        double cumulativeTo(double);
-        double cumulativeTo(double, double, double);
-        double errorFunctionCumulativeTo(double); 
-        double inverseErrorFunctionCumulativeTo(double);
-        double inverseCumulativeTo(double);
-        double inverseCumulativeTo(double, double, double);
 };
